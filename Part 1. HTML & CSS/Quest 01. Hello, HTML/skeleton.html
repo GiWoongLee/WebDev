@@ -2,31 +2,134 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
-		<!-- TODO: 또 무엇이 필요할까요? -->
+		<meta name="description" content="WebDev with HTML"/>
+		<meta name="author" content="wooong1225@gmail.com"/>
+		<title>HTML with GitHub</title>
 	</head>
 	<body>
 		<header>
-			<!-- TODO: 상단의 회색 부분은 어떻게 처리하면 좋을까요? -->
+			<nav>
+				<ul>
+					<li><a href="#">GitHub</a></li>
+					<li><span><form id="searchBox" method="get" action="/search" placeholder="Search"></form></span></li>
+					<li><a href="#">Explore</a></li>
+					<li><a href="#">Features</a></li>
+					<li><a href="#">Enterprise</a></li>
+					<li><a href="#">Pricing</a></li>
+					<li><button type="button">Sign up</button></li>
+					<li><button type="button">Sign in</button></li>
+				</ul>
+			</nav>
 		</header>
 
 		<section class="main">
 			<header class="main-header">
-				<!-- TODO: 메인의 헤더 부분 -->
+				<span class="dirName"><a href="#">KnowRe</a>/<a href="#">WebDevCurriculum</a></span>
+				<nav class="gitInfoRelative">
+					<ul>
+						<li><button type="button" class="infoButton">Watch</button><span id="watchCount"></span></li>
+						<li><button type="button" class="infoButton">Star</button><span id="starCount"></span></li>
+						<li><button type="button" class="infoButton">Fork</button><span id="forkCount"></span></li>
+					</ul>
+				</nav>
 			</header>
 
 			<section class="main-detail">
 				<div>
-					<!-- TODO: 메인의 왼쪽 부분 -->
+					<div>KnowRe web development curriculum for noobs</div>
+					<nav class="gitInfo">
+						<ul>
+							<li><span id="commitCount"></span>commits</li>
+							<li><span id="branchCount"></span>branches</li>
+							<li><span id="releaseCount"></span>releases</li>
+							<li><span id="contributorCount"></span>contributors</li>
+						</ul>
+					</nav>
+					<div>
+						<button type="button" id="refresh"></button>
+						<button type="button" placeholder="Branch:"></button>
+						<span class="dirName"><a href="#">WebDevCurriculum</a>/+</span>
+						<button type="button" id="gitList"></button>
+					</div>
+					<nav class="dbInfo">
+						<ul>
+							<li>This branch is 5 commits ahead of master. <span>Pull request</span> <span>Compare</span></li>
+							<li>...</li>
+							<li>Kivol authored 19 hours ago<span> latest commit 5ead7a7a36</span></li>
+							<li>
+								<span>Part 0.git/Quest 0.Hello, git</span>
+								<span>Quest 0 - Added checklist</span>
+								<span>19 hours ago</span>
+							</li>
+							<li>
+								<span>old</span>
+								<span>New curriculum 2016 - started</span>
+								<span>5 days ago</span>
+							</li>
+							<li>
+								<span>License</span>
+								<span>New curriculum 2016 - started</span>
+								<span>5 days ago</span>
+							</li>
+							<li>
+								<span>README.md</span>
+								<span>19 hours ago</span>
+							</li>
+						</ul>
+					</nav>
+
+					<div class="README Info">
+						<span>README.md</span>
+						<span id="README-main">KnowRe web development curriculum 2016</span>
+					</div>
 				</div>
 
 				<aside>
-					<!-- TODO: 메인의 오른쪽 메뉴 부분 -->
+					<nav>
+						<ul>
+							<li><a href="#">Code</a></li>
+							<li>
+								<span><a href="#">Issues</a></span>
+								<span id="issuesCount"></span>
+							</li>
+							<li>
+								<span><a href="#">Pull requests</a></span>
+								<span id="pullCount"></span>
+							</li>
+							<li><span><a href="#">Pulse</a></span></li>
+							<li><span><a href="#">Graphs</a></span></li>
+						</ul>
+					</nav>
+					<div>
+						<span>HTTPS clone URL</span>
+						<form id="cloneURL" method="get" action="/cloneURL"></form>
+						<span>You can clone with HTTPS or Subversion</span>
+					</div>
+					<button type="button" onclick="cloneInDt()">Clone in Desktop</button>
+					<button type="button" onclick="zipDown()">Download Zip</button>
 				</aside>
 			</section>
 		</section>
 
 		<footer>
-			<!-- TODO: 하단의 Copyright, Terms, Privacy 등은 어떻게 처리하면 좋을까요? -->
+			<nav>
+				<ul>
+					<li>2015 GitHub, Inc.</li>
+					<li><a href="#">Terms</a></li>
+					<li><a href="#">Privacy</a></li>
+					<li><a href="#">Security</a></li>
+					<li><a href="#">Contact</a></li>
+					<li><a href="#">Help</a></li>
+					<li>GITHUB ICON</li>
+					<li><a href="#">Status</a></li>
+					<li><a href="#">API</a></li>
+					<li><a href="#">Training</a></li>
+					<li><a href="#">Shop</a></li>
+					<li><a href="#">Blog</a></li>
+					<li><a href="#">About</a></li>
+					<li><a href="#">Pricing</a></li>
+				</ul>
+			</nav>
 		</footer>
 	</body>
 </html>
