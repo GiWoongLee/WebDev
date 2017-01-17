@@ -1,4 +1,6 @@
 body {
+	display : flex;
+	flex-direction : column;
 	position: absolute;
 	left: 0;
 	top: 0;
@@ -9,30 +11,59 @@ body {
 }
 
 .contents {
-	/* TODO: 이 곳을 채우세요! */
+	display : flex;
+	flex-direction : row;
+	position : absolute;
+	top:0px;
+	bottom:50px;
+	width:100%;
+	flex : 1;
 }
 
 .main {
 	background-color: skyblue;
-	/* TODO: 이 곳을 채우세요! */
+	display : flex;
+	flex-direction : column;
+	position : fixed;
+	top: 0px;
+	bottom : 50px;
+	left: 200px;
+	right : 300px;
 }
 
 .main header {
 	background-color: lightgray;
-	/* TODO: 이 곳을 채우세요! */
+	position : fixed;
+	height : 30px;
 }
 
 .left {
 	background-color: pink;
-	/* TODO: 이 곳을 채우세요! */
+	display : inline-block;
+	position : fixed;
+	top : 0px;
+	left: 0px;
+	bottom : 50px;
+	width : 200px;
+	overflow : hidden;
 }
 
 .right {
 	background-color: greenyellow;
-	/* TODO: 이 곳을 채우세요! */
+	display : inline-block;
+	position : fixed;
+	top : 0px;
+	right : 0px;
+	bottom : 50px;
+	width : 300px;
+	overflow:hidden;
 }
 
 footer {
 	background-color: yellow;
-	/* TODO: 이 곳을 채우세요! */
+	display: block;
+	position : fixed;
+	height : 50px;
+	bottom : 0px;
+	width : 100%;
 }

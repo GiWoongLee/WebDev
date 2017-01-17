@@ -9,30 +9,55 @@ body {
 }
 
 .contents {
-	/* TODO: 이 곳을 채우세요! */
+	display: block;
+	position : absolute;
+	top : 0px;
+	bottom : 50px;
+	width:100%;
 }
 
 .main {
 	background-color: skyblue;
-	/* TODO: 이 곳을 채우세요! */
+	display : inline-block;
+	position : absolute;
+	left : 200px;
+	right : 300px;
+	top:0px;
+	bottom:0px;
+	overflow: hidden;
 }
 
 .main header {
 	background-color: lightgray;
-	/* TODO: 이 곳을 채우세요! */
+	position : fixed;
+	height : 30px;
 }
 
 .left {
 	background-color: pink;
-	/* TODO: 이 곳을 채우세요! */
+	display : inline-block;
+	position : fixed;
+	width : 200px;
+	height : 100%;
+	overflow: hidden;
 }
 
 .right {
 	background-color: greenyellow;
-	/* TODO: 이 곳을 채우세요! */
+	display : inline-block;
+	position : fixed;
+	top:0px;
+	right: 0px;
+	width : 300px;
+	height : 100%;
+	overflow: hidden;
 }
 
 footer {
 	background-color: yellow;
-	/* TODO: 이 곳을 채우세요! */
+	display : block;
+	position : fixed;
+	bottom : 0px;
+	height : 50px;
+	width : 100%;
 }
