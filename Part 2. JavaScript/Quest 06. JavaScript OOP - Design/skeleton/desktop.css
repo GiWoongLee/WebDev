@@ -1,1 +1,12 @@
-/* TODO: 자유롭게 바탕화면 시스템의 CSS를 만들어 보세요! */
+.icon{
+  width: 100px;
+  height: 100px;
+  border: 1px dashed black;
+  display: inline-block;
+  margin: 20px;
+}
+
+.folder{
+  background-color: limegreen;
+  border: 1px solid black;
+}

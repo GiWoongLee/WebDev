@@ -35,17 +35,43 @@
 		<script>
 			var row1Squares = document.querySelectorAll('.row1 .square');
 
+			/*
 			for(var i = 0; i < row1Squares.length; i++) {
 				var node = row1Squares[i];
-				/* TODO: node 변수를 어떻게 조작해야 할까요? */
+				node.addEventListener("click",function(event){
+					node.style.backgroundColor = "yellow";
+				});
+			}
+			*/
+
+			/* closure 함수를 적용 */
+			for(var i = 0; i < row1Squares.length; i++) {
+				(function(j){
+					var node = row1Squares[j];
+					node.addEventListener("click",function(event){
+						node.style.backgroundColor = "yellow";
+						})
+				})(i);
 			}
 
 			var row2Squares = document.querySelectorAll('.row2 .square');
 
 			for(var i = 0; i < row2Squares.length; i++) {
-				var node = row2Squares[i];
-				/* TODO: node 변수를 어떻게 조작해야 할까요? */
+				(function(j){
+					var node = row2Squares[j];
+					node.addEventListener("click",function(event){
+						var cl = event.target.classList;
+						if(cl.contains("enabled")){
+							cl.remove("enabled");
+						}
+						else{
+							cl.add("enabled");
+						}
+					})
+				})(i);
 			}
+
+
 		</script>
 	</body>
 </html>
