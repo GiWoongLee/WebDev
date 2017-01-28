@@ -8,6 +8,11 @@ body{
   padding: 0;
 }
 
+.desktop{
+  position : relative;
+}
+
+
 .icon{
   position : relative;
   width: 100px;
