@@ -14,14 +14,12 @@ var Desktop = function(imgNum,folderNum) {
   this.folderList = new Array();
 
   for(var i=0;i<this.imgNum;i++){
-    var name = Math.random().toString(36).substr(2,5) + '.jpg';
-    this.imgList[i] = new Img(name,'img',i);
+    this.imgList[i] = new Img('img',i);
     this.imgList[i].makeComponent();
   }
 
   for(var j=0;j<this.folderNum;j++){
-    var name = Math.random().toString(36).substr(2,5) + '.folder';
-    this.folderList[j] = new Folder(name,'folder',this.imgNum+j);
+    this.folderList[j] = new Folder('folder',this.imgNum+j);
     this.folderList[j].makeComponent();
   }
 
@@ -29,11 +27,9 @@ var Desktop = function(imgNum,folderNum) {
   programs.className = "progLists"
   var main = document.querySelector(".desktop");
   main.appendChild(programs);
-
 };
 
-var Icon = function(name,type,index) {
-  this.name = name;
+var Icon = function(type,index) {
   this.type = type;
   this.index = index;
 };
@@ -51,10 +47,13 @@ Icon.prototype.makeComponent = function(){
   }
   icon.id = self.index;
 
-  var txt = document.createTextNode(this.name);
-  icon.appendChild(txt);
   var main = document.querySelector(".desktop");
   main.appendChild(icon);
+  /* Location of Icon on Desktop
+    Suppose that height of icon is 80;
+  */
+  var iconHeight = 50;
+  icon.style.top = (this.index * iconHeight + (this.index+1) * 20 ) + "px";
   icon.addEventListener("mousedown",this.movPos);
 
 }
@@ -69,13 +68,10 @@ Icon.prototype.movPos = function(e){
     y: e.pageY - self.offsetTop
   };
 
-  //Due to the Relative Positioning, move element considering relative position
-  var iconHeight = document.getElementById(self.id).offsetHeight;
-  var eleRelaPos = self.id * iconHeight;
 
   function drag(e){
     self.style.left = e.pageX - dragData.x + "px";
-    self.style.top = e.pageY - dragData.y - eleRelaPos + "px";
+    self.style.top = e.pageY - dragData.y + "px";
   }
 
 
@@ -88,9 +84,9 @@ Icon.prototype.movPos = function(e){
 }
 
 
-var Folder = function(name,type,index) {
+var Folder = function(type,index) {
   //inheritance
-  Icon.call(this, name, type,index);
+  Icon.call(this,type,index);
 
   //field
   this.fileNum = 0;

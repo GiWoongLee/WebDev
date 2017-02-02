@@ -10,22 +10,23 @@ body{
 
 
 .icon{
-  position : relative;
-  width: 100px;
-  height: 100px;
-  border: 1px dashed black;
+  position : absolute;
+  width: 50px;
+  height: 50px;
   display: block;
+  background-image: url("hyperconnect.png");
+  background-size : cover;
 }
 
 .folder{
-  position : relative;
-  background-color: limegreen;
-  border: 1px solid black;
+  position : absolute;
+  background-image: url("folder.png");
 }
 
 .windo{
   position :absolute;
   display : inline-block;
+  background-color: white;
   width : 500px;
   height : 300px;
   border : 1px solid black;
