@@ -8,10 +8,6 @@ body{
   padding: 0;
 }
 
-.desktop{
-  position : relative;
-}
-
 
 .icon{
   position : relative;
@@ -25,4 +21,44 @@ body{
   position : relative;
   background-color: limegreen;
   border: 1px solid black;
+}
+
+.windo{
+  position :absolute;
+  display : inline-block;
+  width : 500px;
+  height : 300px;
+  border : 1px solid black;
+}
+
+.windoBut{
+  position : relative;
+  display : inline-block;
+  width : 30px;
+  height: 30px;
+  border : 1px solid black;
+}
+
+.progLists{
+  position : absolute;
+  left: 50%;
+  /* make center of progLists located on center*/
+  margin-left : -150px;
+  right: 50%;
+  bottom : 0px;
+  width : 300px;
+  height : 60px;
+  border : 1px solid black;
+}
+
+#offBut{
+  background-color: red;
+}
+
+#hideBut{
+  background-color: yellow;
+}
+
+#maxBut{
+  background-color: green;
 }
