@@ -22,11 +22,26 @@ var textArea = function(){
   txtArea.className = "noteArea";
   var txtNode = document.createElement("textarea");
   txtArea.appendChild(txtNode);
-  txtNode.className = "note";
+  txtNode.id = "note";
 
   return txtArea;
 };
 
+textArea.removeText = function(){
+  var txt = document.getElementById("note");
+  txt.value = "";
+};
+
+textArea.readText = function(){
+  var txt = document.getElementById("note");
+  return txt.value;
+};
+
+textArea.refreshText = function(){
+  var content = textArea.readText();
+  textArea.removeText();
+  return content;
+};
 
 var func = function(){
   var func = document.createElement("li");
@@ -40,6 +55,9 @@ var newFunc = function(){
   ele.name = "new";
   var txt = document.createTextNode("New");
   ele.appendChild(txt);
+  ele.addEventListener("click",function(){
+    textArea.removeText();
+  })
   return ele;
 };
 
