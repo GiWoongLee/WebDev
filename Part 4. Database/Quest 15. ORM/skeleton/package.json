@@ -2,6 +2,6 @@
   "private": true,
   "dependencies": {
     "express": "*",
-    "sequelize": "*"
+    "sequelize": "^3.30.2"
   }
 }
