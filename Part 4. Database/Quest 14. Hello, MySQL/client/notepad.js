@@ -211,40 +211,51 @@ var loadWindo = function(){
   req.open("GET","/show",true);
   req.onreadystatechange = function(e){
     if(req.readyState==4 && req.status == 200){
-      var json = JSON.parse(req.responseText);
+      var result = JSON.parse(req.responseText);
+      if(result.status == "failure") {
+        var main = document.querySelector(".notepad");
+        main.removeChild(windo);
+        alert("You have to login First!");
+      }
 
-      for(var i=0;i<json.length;i++){
-        (function(j){
-          var ele = document.createElement("li");
-
-          ele.addEventListener("dblclick",function(e){
-            var xhr = new XMLHttpRequest();
-            xhr.open("POST","/load",true);
-            xhr.onreadystatechange = function(){
-              if(xhr.readyState==4 && xhr.status == 200){
-                var main = document.querySelector(".notepad");
-                main.removeChild(windo);
-                var newWindo = window.open("/");
-                newWindo.onload = function(){
-                  newWindo.document.title = ele.textContent;
-                  newWindo.document.getElementById("note").innerHTML = xhr.responseText;
+      else{
+        for(var i=0;i<result.content.length;i++){
+          (function(j){
+            var ele = document.createElement("li");
+            ele.addEventListener("dblclick",function(e){
+              var xhr = new XMLHttpRequest();
+              xhr.open("POST","/load",true);
+              xhr.onreadystatechange = function(){
+                if(xhr.readyState==4 && xhr.status == 200){
+                  var main = document.querySelector(".notepad");
+                  main.removeChild(windo);
+                  var result = JSON.parse(xhr.responseText);
+                  if(result.status == "failure") alert(err);
+                  else{
+                    var newWindo = window.open("/");
+                    newWindo.onload = function(){
+                      newWindo.document.title = ele.textContent;
+                      newWindo.document.getElementById("note").innerHTML = result.content;
+                    }
+                  }
                 }
               }
-            }
-            var fileName = ele.textContent;
-            xhr.setRequestHeader("content-type","application/json");
-            xhr.send(JSON.stringify({"name" : fileName}));
+              var fileName = ele.textContent;
+              xhr.setRequestHeader("content-type","application/json");
+              xhr.send(JSON.stringify({"name" : fileName}));
 
-          });
-          ele.className = "fileEle";
-          var txt = document.createTextNode(json[j]);
-          ele.appendChild(txt);
-          fileList.appendChild(ele);
-      })(i)
+            });
+            ele.className = "fileEle";
+            var txt = document.createTextNode(result.content[j]);
+            ele.appendChild(txt);
+            fileList.appendChild(ele);
+          })(i)
+        }
       }
+
+
     }
   }
-  //후에 사용자가 생기면 사용자 이름도 보내기
   req.send(null);
 
   var message = document.createElement("div");
