@@ -1,9 +1,0 @@
-{
-  "private": true,
-  "dependencies": {
-    "express": "*",
-    "sequelize": "^3.30.2",
-    "sequelize-cli": "^2.5.1",
-    "sqlite3": "^3.1.8"
-  }
-}
