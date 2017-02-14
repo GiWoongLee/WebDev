@@ -11,9 +11,9 @@ module.exports = function(sequelize,DataTypes){
           }
         })
       }
-    }
+    },
+    indexes : [{fields : ['UserId']}]
   })
-
 
   return Note;
 };

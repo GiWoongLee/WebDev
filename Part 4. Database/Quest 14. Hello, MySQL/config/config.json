@@ -1,0 +1,20 @@
+{
+  "development" : {
+    "dialect": "mysql",
+    "database": "notepad",
+    "username" : "woong",
+    "password" : "woong1225",
+    "host" : "localhost"
+  },
+  "test" : {
+    "dialect" : "mysql",
+    "storage" : ":memory:"
+  },
+  "production": {
+    "dialect": "mysql",
+    "database": "notepad",
+    "username" : "woong",
+    "password" : "woong1225",
+    "host" : "127.0.0.1"
+  }
+}

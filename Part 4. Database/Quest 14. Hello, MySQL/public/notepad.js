@@ -159,7 +159,7 @@ var logoutFunc = function(){
   ele.appendChild(txt);
   ele.addEventListener("click",function(){
     var xhr = new XMLHttpRequest();
-    xhr.open("POST","logout",true);
+    xhr.open("POST","/users/logout",true);
     xhr.onreadystatechange = function(e){
       if(xhr.readyState==4 && xhr.status == 200){
         document.open();
@@ -348,11 +348,11 @@ var loginWindo = function(){
 
   submitBut.addEventListener('click',function(event){
     var xhr = new XMLHttpRequest();
-    xhr.open("POST","/login",true);
+    xhr.open("POST","/users/login",true);
     xhr.onreadystatechange = function(e){
       if(xhr.readyState==4 && xhr.status==200){
         var info = JSON.parse(xhr.responseText);
-        if(info.status=='failure') alert(info.content);
+        if(info.status=='failure') alert(info.message);
         else{
           //set logged_in status true and windows list in localStorage
           localStorage.setItem("logged_in",true);

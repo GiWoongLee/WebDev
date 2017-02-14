@@ -1,4 +1,4 @@
-//var bcrypt = require("bcrypt-nodejs");
+var bcrypt = require("bcrypt");
 
 module.exports = function(sequelize,DataTypes){
   var User = sequelize.define("User",{
@@ -8,77 +8,76 @@ module.exports = function(sequelize,DataTypes){
       allowNull : false,
       autoIncrement : true
     },
-    username : DataTypes.STRING,
-    email : {type : DataTypes.STRING, allowNull : false},
-    password : DataTypes.STRING
+    username : {
+      type : DataTypes.STRING,
+      allowNull : false,
+      validate : {
+        notEmpty : true,
+        len : [1,20]
+      }
+    },
+    email : {
+      type : DataTypes.STRING,
+      allowNull : false,
+      validate : {
+        isEmail : true,
+        notEmpty : true,
+        len : [1,255]
+      }
+    },
+    password : DataTypes.VIRTUAL,
+    password_confirmation : DataTypes.VIRTUAL,
+    password_digest : {
+      type : DataTypes.STRING,
+      validate : {
+        notEmpty : true
+      }
+    }
   },{
     classMethods : {
       associate : function(models){
         User.hasMany(models.Session);
         User.hasMany(models.Note);
       }
-    }
-  })
-
-
-  return User;
-};
-
-
-
-
-    /*
-    password : {
-      type : DataTypes.VIRTUAL,
-      set : function(val){
-        this.setDataValue('password',val);
-        this.setDataValue('password_digest',this.getSecurePassword);
-      },
-      validate: {
-        isEmail : true,
-        isLongEnough :function(val){
-          if(val.length < 7){
-            throw new Error("Please choose a longer password");
-          }
-        }
-      }
-    },
-    password_digest : {
-      type : DataTypes.STRING,
-      validate : {
-        notEmpty : true
-      },
-      get : function(){
-        return this.getDataValue(password_digest);
-      }
-    }
-  },{
-    classMethods: {
-      associate : function(models){
-        User.hasMany(models.Note);
-        User.hasMany(models.Session);
-      }
     },
     instanceMethods : {
       authenticate : function(value){
         if(bcrypt.compareSync(value,this.password_digest))
-          return this;
-        else {
+          return true;
+        else
           return false;
-        }
       }
     }
+  });
 
+  var hasSecurePassword = function(user, options, callback){
+    if(user.password != user.password_confirmation )
+      throw new Error("User password and User password confirmation unmatched!");
+    else{
+      bcrypt.hash(user.get('password'),10,function(err,hash){
+        if(err) return callback(err);
+        user.set('password_digest',hash);
+        return callback(null,options);
+      })
+    }
+  }
 
+  User.beforeCreate(function(user,options,callback){
+    user.email = user.email.toLowerCase();
+    if(user.password)
+      hasSecurePassword(user, options, callback);
+    else {
+      return callback(null,options);
+    }
+  });
 
-User.getSecurePassword = function(val){
-  bcrypt.hash(val,10,null,function(err,hash){
-    if(err) return callback(err);
-    return hash;
-  })
-}
-
+  User.beforeUpdate(function(user, options, callback){
+    user.email = user.email.toLowerCase();
+    if(user.password)
+      hasSecurePassword(user, options,callback);
+    else
+      return callback(null,options);
+  });
 
   return User;
-}
-*/
+};

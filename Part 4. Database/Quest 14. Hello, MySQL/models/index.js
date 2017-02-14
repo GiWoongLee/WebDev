@@ -2,13 +2,15 @@ var fs = require("fs"),
   path = require("path"),
   Sequelize = require("sequelize"),
   env = process.env.NODE_ENV || "development",
+  config = require(path.join(__dirname,'..','config','config.json'))[env];
   db = {};
 
-var sequelize = new Sequelize("notepad","woong","woong1225",{
-  host : 'localhost',
-  dialect : 'mysql',
-  port : '3306'
-});
+if(process.env.DATABASE_URL){
+  var sequelize = new Sequelize(process.env.DATABASE_URL,config);
+}
+else{
+  var sequelize = new Sequelize(config.database,config.username,config.password,config);
+}
 
 
 fs.readdirSync(__dirname)
@@ -29,35 +31,5 @@ Object.keys(db).forEach(function(modelName){
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
-
-db.User.sync()
-  .then(function(){
-    db.User.create({
-      username : 'woong',
-      email : 'wooong1225@gmail.com',
-      password: 'woong1225'
-    })
-    .then(function(){
-      db.User.create({
-        username : "kyuin",
-        email : "oh@gmail.com",
-        password: "ohki21"
-      })
-    })
-    .then(function(){
-        db.User.create({
-          username : "sunghwan",
-          email : "skcryout@gmail.com",
-          password : "audghksWkd"
-      })
-    })
-})
-.then(function(){
-    db.Session.sync();
-    db.Note.sync();
-})
-.catch(function(e){
-    console.log("Something went wrong on User Model", e);
-});
 
 module.exports = db;
