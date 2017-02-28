@@ -1,0 +1,7 @@
+{
+  "name": "sample-desktop",
+  "short_name": "sample-desktop",
+  "description": "Make a desktop with icons/folders",
+  "start_url": "/",
+  "display": "standalone"
+}
