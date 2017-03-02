@@ -1,0 +1,46 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="window-hide-button">
+  <template>
+    <style>
+      .button{
+        position : relative;
+        display : inline-block;
+        width : 30px;
+        height: 30px;
+        border : 1px solid black;
+        background-color: yellow;
+      }
+
+    </style>
+    <span class="button" on-click="hideAtBottom"></span>
+  </template>
+
+  <script>
+    Polymer({
+
+      is: 'window-hide-button',
+
+      properties : {
+        hide : {
+          type : Boolean,
+          value : true,
+          notify : true,
+          reflectToAttribute : true
+        },
+        hidebottom : {
+          type : Boolean,
+          value : true,
+          notify : true,
+          reflectToAttribute : true
+        }
+      },
+
+      hideAtBottom : function(event){
+        this.hide = true;
+        this.hidebottom = false;
+      }
+
+    });
+  </script>
+</dom-module>

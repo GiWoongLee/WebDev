@@ -1,0 +1,51 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="window-off-button.html">
+<link rel="import" href="window-hide-button.html">
+<link rel="import" href="window-max-button.html">
+
+<dom-module id="folder-window">
+  <template>
+    <style>
+      .window{
+        position :absolute;
+        display : inline-block;
+        background-color: white;
+        top : 50px;
+        left : 300px;
+        width : 500px;
+        height : 300px;
+        border : 1px solid black;
+      }
+    </style>
+    <div class="window">
+      <div class="buttons">
+        <window-off-button hide = "{{hide}}"></window-off-button>
+        <window-hide-button hide="{{hide}}"hidebottom="{{hidebottom}}"></window-hide-button>
+        <window-max-button></window-max-button>
+      </div>
+    </div>
+  </template>
+
+  <script>
+    Polymer({
+
+      is: 'folder-window',
+
+      properties : {
+        hide : {
+          type : Boolean,
+          value : true,
+          notify : true
+        },
+
+        hidebottom : {
+          type : Boolean,
+          value : true,
+          notify : true,
+          reflectToAttribute : true
+        }
+      }
+
+    });
+  </script>
+</dom-module>

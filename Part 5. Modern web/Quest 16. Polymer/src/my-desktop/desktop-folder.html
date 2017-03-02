@@ -1,0 +1,70 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="folder-window.html">
+
+<dom-module id="desktop-folder">
+  <template>
+    <style>
+      .folder{
+        position : absolute;
+        width: 50px;
+        height: 50px;
+        display: block;
+        background-image: url("../../img/folder.png");
+        background-size: cover;
+      }
+    </style>
+    <div class="icon folder" on-mousedown ="move" on-dblclick="show">
+    </div>
+    <folder-window hidden$={{hide}} hide="{{hide}}" hidebottom="{{hidebottom}}"></folder-window>
+  </template>
+
+  <script>
+    Polymer({
+
+      is: 'desktop-folder',
+
+      properties : {
+        hide : {
+          type: Boolean,
+          value : true,
+          notify : true
+        },
+
+        hidebottom : {
+          type : Boolean,
+          value : true,
+          notify : true,
+          reflectToAttribute : true
+        }
+      },
+
+      move : function(event){
+        var icon = event.target;
+        var dragData = {
+          x : event.pageX - icon.offsetLeft,
+          y : event.pageY - icon.offsetTop
+        };
+
+        function drag(event){
+          icon.style.left = event.pageX - dragData.x + "px";
+          icon.style.top = event.pageY - dragData.y + "px";
+        }
+
+        document.addEventListener("mousemove",drag);
+        document.addEventListener("mouseup",function(e){
+          document.removeEventListener("mousemove",drag);
+        });
+      },
+
+      show : function(event){
+        if(this.hide == true){
+          this.hide = false;
+        }
+        else{
+          console.log("Already Opened Window!")
+        }
+      }
+
+    });
+  </script>
+</dom-module>

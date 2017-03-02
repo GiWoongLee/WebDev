@@ -1,0 +1,43 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="desktop-icon">
+  <template>
+    <style>
+      .icon{
+        position : absolute;
+        width: 50px;
+        height: 50px;
+        display: block;
+        background-image: url("../../img/hyperconnect.png");
+        background-size: cover;
+      }
+    </style>
+    <div class="icon" on-mousedown = "move">
+    </div>
+  </template>
+
+  <script>
+    Polymer({
+
+      is: 'desktop-icon',
+
+      move : function(event){
+        var icon = event.target;
+        var dragData = {
+          x : event.pageX - icon.offsetLeft,
+          y : event.pageY - icon.offsetTop
+        };
+
+        function drag(event){
+          icon.style.left = event.pageX - dragData.x + "px";
+          icon.style.top = event.pageY - dragData.y + "px";
+        }
+
+        document.addEventListener("mousemove",drag);
+        document.addEventListener("mouseup",function(e){
+          document.removeEventListener("mousemove",drag);
+        });
+      }
+    });
+  </script>
+</dom-module>

@@ -1,13 +1,31 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="desktop-icon.html">
+<link rel="import" href="desktop-folder.html">
+<link rel="import" href="folder-window.html">
+<link rel="import" href="hidden-folder.html">
 
 <dom-module id="my-desktop">
   <template>
     <style>
-      :host {
-        display: block;
+      .hiddenFolderList{
+        position : absolute;
+        left: 50%;
+        /* make center of progLists located on center*/
+        margin-left : -150px;
+        right: 50%;
+        bottom : 0px;
+        width : 300px;
+        height : 60px;
+        border : 1px solid black;
       }
     </style>
-    <h2>Hello [[prop1]]</h2>
+    <desktop-icon id="icon1" ></desktop-icon>
+    <desktop-folder id="icon2" hide="{{hideIcon1}}" hidebottom="{{hidebottomIcon1}}"></desktop-folder>
+    <desktop-folder id="icon3" hide="{{hideIcon2}}" hidebottom="{{hidebottomIcon2}}"></desktop-folder>
+    <div class="hiddenFolderList">
+      <hidden-folder hidden$={{hidebottomIcon1}} hide = "{{hideIcon1}}" hidebottom="{{hidebottomIcon1}}"></hidden-folder>
+      <hidden-folder hidden$={{hidebottomIcon2}} hide = "{{hideIcon2}}" hidebottom="{{hidebottomIcon2}}"></hidden-folder>
+    </div>
   </template>
 
   <script>
@@ -15,13 +33,43 @@
 
       is: 'my-desktop',
 
-      properties: {
-        prop1: {
-          type: String,
-          value: 'my-desktop',
+      properties : {
+        hide : {
+          type : Boolean,
+          value : true,
+          notify : true
         },
+        hideIcon1 : {
+          type : Boolean,
+          value : true,
+          notify : true
+        },
+        hideIcon2 : {
+          type : Boolean,
+          value : true,
+          notify : true,
+        },
+        hidebottomIcon1 : {
+          type : Boolean,
+          value : true,
+          notify : true
+        },
+        hidebottomIcon2 : {
+          type : Boolean,
+          value : true,
+          notify : true,
+        }
       },
 
+      ready : function(){
+        //Positioning elements with 20px difference between each other
+        var icons = document.getElementsByClassName("icon");
+        var diff = 20; var width = 50;
+        for(var num=0;num<icons.length;num++){
+          icons[num].style.top = (diff * (num+1) + width * num) + "px";
+        }
+
+      }
     });
   </script>
 </dom-module>

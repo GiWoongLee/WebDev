@@ -1,0 +1,62 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="window-max-button">
+  <template>
+    <style>
+      .button{
+        position : relative;
+        display : inline-block;
+        width : 30px;
+        height: 30px;
+        border : 1px solid black;
+        background-color:green;
+      }
+    </style>
+    <span class="button" on-click="max"></span>
+  </template>
+
+  <script>
+    Polymer({
+
+      is: 'window-max-button',
+
+      properties : {
+        isMax : {
+          type : Boolean,
+          value : false
+        },
+        originWidth : {
+          type : String,
+          value : "500px"
+        },
+        originHeight : {
+          type : String,
+          value : "300px"
+        },
+        maxWidth : {
+          type : String,
+          value : "1000px"
+        },
+        maxHeight : {
+          type : String,
+          value : "500px"
+        }
+      },
+
+      max : function(event){
+        var windo = this.parentNode.parentNode;
+        if(this.isMax){
+          windo.style.width = this.originWidth;
+          windo.style.height = this.originHeight;
+          this.isMax = false;
+        }
+        else{
+          windo.style.width = this.maxWidth;
+          windo.style.height = this.maxHeight;
+          this.isMax = true;
+        }
+      }
+
+    });
+  </script>
+</dom-module>
