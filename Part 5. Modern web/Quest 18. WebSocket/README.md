@@ -1,24 +1,28 @@
-# Quest 18. WebSocket
+# Quest 17. Playing SVG
 
 
 ## Introduction
-* 이번 퀘스트에서는 브라우저의 요청 없이도 서버가 브라우저에게 무언가 말을 걸어 데이터를 주고받는 방법에 대해 알아보겠습니다.
+* 이번 퀘스트에서는 사각형과 박스 모델 일색인 웹에서 다양한 도형을 그리는 방법을 알아보겠습니다.
 
 ## Topics
-* websocket
-  * socket.io
+* 벡터 그래픽
+  * SVG 포맷
+* 키보드 이벤트
+  * `onkeypress`
+  * `onkeydown` / `onkeyup`
+  * keyCode
 
 ## Resources
-* [www.websocket.org](http://www.websocket.org/)
-* [MDN - WebSocket](https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API)
-* [socket.io](http://socket.io/)
+* [MDN - SVG](https://developer.mozilla.org/ko/docs/Web/SVG)
 
 ## Checklist
-* WebSocket은 어떤 방식으로 HTTP 프로토콜 위에 실시간 통신을 구현하나요?
-* socket.io를 통해 node.js 서버에서 여러 개의 채팅방을 관리/구현하려면 어떻게 해야 하나요?
+* SVG 포맷은 JPG, PNG 등의 포맷과 어떤 점이 다른가요?
+* SVG 포맷은 HTML 포맷과 어떤 점이 다른가요?
+* 브라우저 상의 키보드 이벤트에서 keyCode는 어떤 역할을 하나요?
 
 ## Quest
-* Quest 17에서 만든 스케치보드를 실시간 멀티플레이어 방식으로 업그레이드 해 보겠습니다.
-  * 생성, 이동, 삭제 등 모든 변화는 실시간으로 기록되고 상대방에게 반영되어야 합니다.
-  * 여러 개의 방을 구현할 수 있어야 합니다.
-  * socket.io를 사용해도 무방합니다.
+* 간단한 스케치보드를 만들어 보려고 합니다.
+  * 정해진 크기와 모양의 사각형, 삼각형, 원을 그리는 버튼이 있어야 합니다.
+  * 그린 삼각형, 사각형, 원을 이동하고 삭제하는 기능이 있어야 합니다.
+    * 키보드의 Arrow 키와 Delete 키를 통해 선택된 도형을 이동하고 삭제할 수 있어야 합니다.
+  * 저장 기능은 굳이 구현하지 않아도 됩니다.

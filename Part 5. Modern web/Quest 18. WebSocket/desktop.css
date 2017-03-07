@@ -1,0 +1,86 @@
+body{
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+ul,li {
+	list-style-type: none;
+	list-style-position:inside;
+  margin:0;
+  padding:0;
+}
+
+
+.desktop{
+	position: relative;
+	width:100%;
+	height:100%;
+}
+
+.svgButtons, .svgGroup {
+  width : 140px;
+  height : 80px;
+}
+
+.figureNav{
+	display:flex;
+	list-style-type: none;
+	margin: 0;
+	padding : 0;
+	width: 100%;
+	height : 80px;
+	overflow : hidden;
+	background-color: #333;
+}
+
+.figureButtons{
+	display : flex;
+	flex-direction : row;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+	color:white;
+	top:50%;
+	left:50%;
+	width : 80px;
+	height : 40px;
+	padding: 20px 30px;
+	vertical-align: middle;
+	text-decoration : none;
+  cursor : copy;
+}
+
+.figureButtons:hover{
+	background-color: #111;
+}
+
+.canvas{
+  position : relative;
+	width:100%;
+	height:80%;
+  overflow: hidden;
+}
+
+.svgEle{
+  position : relative;
+  width : 500px;
+  height : 500px;
+  overflow: auto;
+}
+
+.figures{
+  position : absolute;
+}
+
+.draggable{
+  cursor : move;
+}
+
+svg{
+  overflow : visible;
+}
