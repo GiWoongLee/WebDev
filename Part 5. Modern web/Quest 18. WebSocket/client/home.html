@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Welcome to Canvas</title>
+    <meta charset="UTF-8">
+		<link rel="stylesheet" href="./home.css">
+    <link rel="stylesheet" href="./desktop.css">
+    <script src="./desktop.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+  </head>
+  <body>
+    <section class="search">
+      <input type="text" id="searchRoom"></input>
+    </section>
+    <script>
+      var socket = io.connect('http://localhost:8080');
+    </script>
+  </body>
+</html>

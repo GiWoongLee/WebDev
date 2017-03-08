@@ -1,0 +1,20 @@
+{
+  "name": "canvas",
+  "description": "Making a canvas where clients can use together",
+  "main": "",
+  "authors": [
+    "woong <anguish71@gmail.com>"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/GiWoongLee/WebDev",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "^3.1.1"
+  }
+}
