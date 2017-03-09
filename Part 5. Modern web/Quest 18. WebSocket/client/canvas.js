@@ -15,10 +15,12 @@ var Buttons = function(){
   var rectButton = new Rect();
   var triButton = new Tri();
   var circleButton = new Circle();
+  var roomName = new RoomName();
 
   butList.appendChild(rectButton);
   butList.appendChild(triButton);
   butList.appendChild(circleButton);
+  butList.appendChild(roomName);
 
   var main = document.querySelector(".desktop");
   main.appendChild(nav);
@@ -358,4 +360,11 @@ function deselectElement(e){
     window.removeEventListener("keydown",deselectElement);
     selectedElement = null;
   }
+}
+
+var RoomName = function(){
+  var button = document.createElement("li");
+  button.className = "figureButtons";
+  button.id = "roomName";
+  return button;
 }

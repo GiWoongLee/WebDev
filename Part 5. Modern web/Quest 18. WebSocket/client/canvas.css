@@ -55,6 +55,10 @@ ul,li {
   cursor : copy;
 }
 
+.figureButtons:last-child{
+  margin-left: auto;
+}
+
 .figureButtons:hover{
 	background-color: #111;
 }
