@@ -21,6 +21,8 @@ var Canvas = Canvas || (function(){
             $('.msgButtons').append("<button id='cancelButton'>Cancel</button>");
             $('#joinButton').click(function(e){
               function loadCanvas(data){
+                console.log(data);
+                console.log(data.content);
                 $('body').html(data.content);
                 $('#roomName').html(roomName);
                 socket.removeListener("roomJoined",loadCanvas);

@@ -1,3 +1,82 @@
+var socket = Canvas.getSocket();
+var figureNum = 0;
+
+socket.on("drawRectangle",function(data){
+  var ele = d3.select("#"+data.id);
+  if(ele.empty()){
+    ele = document.createElementNS("http://www.w3.org/2000/svg","rect");
+    ele.className = "figures";
+    ele.id = data.id;
+    figureNum++;
+    document.querySelector(".svgCanvas").appendChild(ele);
+    ele.setAttributeNS(null,"fill","#0000cc");
+    ele.setAttributeNS(null,"x",data.posX);
+    ele.setAttributeNS(null,"y",data.posY);
+    ele.setAttributeNS(null,"width",data.width);
+    ele.setAttributeNS(null,"height",data.height);
+  }
+  else{
+    ele.attr('x',data.posX);
+    ele.attr("y",data.posY);
+    ele.attr("width",data.width);
+    ele.attr("height",data.height);
+  }
+})
+
+socket.on("drawTriangle",function(data){
+  var ele = d3.select("#"+data.id);
+  var newPoint = {
+    a : data.point1,
+    b : data.point2,
+    c : data.point3,
+    d : data.point4,
+    e : data.point5,
+    f : data.point6
+  }
+
+  if(ele.empty()){
+    ele = document.createElementNS("http://www.w3.org/2000/svg","polygon");
+    ele.className = "figures";
+    ele.id = data.id;
+    figureNum++;
+    document.querySelector(".svgCanvas").appendChild(ele);
+    ele.setAttributeNS(null,"fill","green");
+    ele.setAttributeNS(null,"points",(newPoint.a + "," + newPoint.b + " " + newPoint.c + "," + newPoint.d + " " +newPoint.e + "," + newPoint.f));
+  }
+  else{
+    ele.attr("points",(newPoint.a + "," + newPoint.b + " " + newPoint.c + "," + newPoint.d + " " +newPoint.e + "," + newPoint.f));
+  }
+})
+
+socket.on("drawCircle",function(data){
+  var ele = d3.select("#"+data.id);
+  if(ele.empty()){
+    ele = document.createElementNS("http://www.w3.org/2000/svg","circle");
+    ele.className = "figures";
+    ele.id = data.id;
+    figureNum++;
+    document.querySelector(".svgCanvas").appendChild(ele);
+    ele.setAttributeNS(null,"fill","red");
+    ele.setAttributeNS(null,"cx",data.cx);
+    ele.setAttributeNS(null,"cy",data.cy);
+    ele.setAttributeNS(null,"fill","#cc0000");
+    ele.setAttributeNS(null,"r",data.r);
+  }
+  else{
+    ele.attr("r",data.r);
+  }
+})
+
+socket.on('moveFigure',function(data){
+  var ele = d3.select("#"+data.id);
+  ele.attr("transform","translate(" + data.translateX + "," + data.translateY + ")");
+})
+
+socket.on('removeFigure',function(data){
+  var ele = d3.select("#" + data.id).remove();
+
+})
+
 var Desktop = function(){
 
   var buttons = new Buttons();
@@ -142,6 +221,7 @@ var Canvas = function(){
   var canvas = document.createElement("div");
   canvas.className = "canvas";
   var svg = document.createElementNS("http://www.w3.org/2000/svg","svg");
+  svg.id = "canvasSVG";
   svg.setAttribute("xmlns","http://www.w3.org/2000/svg");
   svg.setAttribute("width","1000px");
   svg.setAttribute("height","800px");
@@ -162,9 +242,9 @@ function drawRectangle(e){
   var canvas = document.querySelector(".canvas");
   var originX = e.clientX;
   var originY = e.clientY;
-
   var ele = document.createElementNS("http://www.w3.org/2000/svg","rect");
   ele.className = "figures";
+  ele.id = "figure" + (++figureNum);
   ele.setAttributeNS(null,"x",originX - canvas.offsetLeft);
   ele.setAttributeNS(null,"y",originY - canvas.offsetTop);
   ele.setAttributeNS(null,"fill","#0000cc");
@@ -174,7 +254,19 @@ function drawRectangle(e){
   function draw(e){
     ele.setAttributeNS(null,"width",e.clientX-originX);
     ele.setAttributeNS(null,"height",e.clientY-originY);
+    var roomName = $('#roomName').html();
+
+    socket.emit("drawRectangle",{
+      roomName : roomName,
+      id : ele.id,
+      posX : ele.getAttribute("x"),
+      posY : ele.getAttribute("y"),
+      width : ele.getAttribute("width"),
+      height : ele.getAttribute("height"),
+    });
   }
+
+
 
   canvas.addEventListener("mousemove",draw);
   canvas.addEventListener("mouseup",function(e){
@@ -199,6 +291,7 @@ function drawTriangle(e){
 
   var ele = document.createElementNS("http://www.w3.org/2000/svg","polygon");
   ele.className = "figures";
+  ele.id = "figure" + (++figureNum);
 
   var point = {
     a : originX,
@@ -225,6 +318,19 @@ function drawTriangle(e){
     }
 
     ele.setAttributeNS(null,"points",(newPoint.a + "," + newPoint.b + " " + newPoint.c + "," + newPoint.d + " " +newPoint.e + "," + newPoint.f));
+
+    var roomName = $('#roomName').html();
+
+    socket.emit("drawTriangle",{
+      roomName : roomName,
+      id : ele.id,
+      point1 : newPoint.a,
+      point2 : newPoint.b,
+      point3 : newPoint.c,
+      point4 : newPoint.d,
+      point5 : newPoint.e,
+      point6 : newPoint.f
+    });
   }
 
   canvas.addEventListener("mousemove",draw);
@@ -247,6 +353,8 @@ function drawCircle(e){
 
   var ele = document.createElementNS("http://www.w3.org/2000/svg","circle");
   ele.className = "figures";
+  ele.id = "figure" + (++figureNum);
+
   ele.setAttributeNS(null,"cx",originX - canvas.offsetLeft);
   ele.setAttributeNS(null,"cy",originY - canvas.offsetTop);
   ele.setAttributeNS(null,"fill","#cc0000");
@@ -255,6 +363,15 @@ function drawCircle(e){
 
   function draw(e){
     ele.setAttributeNS(null,"r",e.clientX-originX);
+    var roomName = $('#roomName').html();
+
+    socket.emit("drawCircle",{
+      roomName : roomName,
+      id : ele.id,
+      cx : ele.getAttribute("cx"),
+      cy : ele.getAttribute("cy"),
+      r : ele.getAttribute("r")
+    });
   }
 
   canvas.addEventListener("mousemove",draw);
@@ -284,6 +401,7 @@ function selectElement(e){
 function moveByMouse(e){
   var originX = e.clientX;
   var originY = e.clientY;
+  var elementId = selectedElement.id;
 
   //Save translate(X,Y) to reflect original tranform position
   var transX = 0;
@@ -297,6 +415,13 @@ function moveByMouse(e){
     var movedX = e.clientX - originX;
     var movedY = e.clientY - originY;
     selectedElement.setAttributeNS(null,"transform","translate(" + (transX + movedX) + "," + (transY +movedY) + ")");
+    var roomName = $('#roomName').html();
+    socket.emit('moveFigure',{
+      roomName : roomName,
+      id : elementId,
+      translateX : selectedElement.getCTM().e,
+      translateY : selectedElement.getCTM().f
+    })
   }
 
   document.addEventListener("mousemove",drag);
@@ -311,37 +436,46 @@ function moveByArrow(e){
   //Save translate(X,Y) to reflect original tranform position
   var transX = 0;
   var transY = 0;
+  var elementId = selectedElement.id;
+
   if(selectedElement.getAttribute("transform")!=null){
     transX = selectedElement.getCTM().e;
     transY = selectedElement.getCTM().f;
   }
-
-
+  var movedX;
+  var movedY;
   //up
  if(e.keyCode == 38){
-    var movedX = transX;
-    var movedY = transY - 10;
+    movedX = transX;
+    movedY = transY - 10;
     selectedElement.setAttributeNS(null,"transform","translate(" + movedX + "," + movedY + ")");
   }
   //left
   else if(e.keyCode == 37){
-    var movedX = transX - 10;
-    var movedY = transY;
+    movedX = transX - 10;
+    movedY = transY;
     selectedElement.setAttributeNS(null,"transform","translate(" + movedX + "," + movedY + ")");
   }
   //down
   else if(e.keyCode == 40){
-    var movedX = transX;
-    var movedY = transY + 10;
+    movedX = transX;
+    movedY = transY + 10;
     selectedElement.setAttributeNS(null,"transform","translate(" + movedX + "," + movedY + ")");
   }
   //right
   else if(e.keyCode == 39){
-    var movedX = transX + 10;
-    var movedY = transY;
+    movedX = transX + 10;
+    movedY = transY;
     selectedElement.setAttributeNS(null,"transform","translate(" + movedX + "," + movedY + ")");
   }
 
+  var roomName = $('#roomName').html();
+  socket.emit("moveFigure",{
+    roomName : roomName,
+    id : elementId,
+    translateX : selectedElement.getCTM().e,
+    translateY : selectedElement.getCTM().f
+  })
 }
 
 function removeFigure(e){
@@ -349,6 +483,11 @@ function removeFigure(e){
   if(e.keyCode == 8){
     var svg = document.querySelector(".svgCanvas");
     svg.removeChild(selectedElement);
+    var roomName = $('#roomName').html();
+    socket.emit("removeFigure",{
+      roomName : roomName,
+      id : selectedElement.id
+    })
   }
 }
 

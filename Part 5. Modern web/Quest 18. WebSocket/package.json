@@ -8,6 +8,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "cookie-parser": "^1.4.3",
     "express": "^4.15.2",
     "octicons": "^5.0.1",
     "socket.io": "^1.7.3"
