@@ -14,7 +14,7 @@ a {
 }
 /*========*/
 
-#headline{
+.headline{
   font-size : 35px;
   font-weight : bold;
 }
@@ -134,4 +134,51 @@ a {
   width : 100px;
   height : 20px;
   float : none;
+}
+
+#msgBox{
+  display : flex;
+  flex-direction: column;
+	position : absolute;
+	top: 450px;
+	left: 50%;
+	margin-left: -200px;
+	margin-top : -150px;
+	width: 400px;
+	height: 150px;
+	border-radius : 5px;
+	background-color : #f2f2f2;
+	padding: 5px;
+	border : 1px solid black;
+}
+
+#msg{
+  font-size : 20px;
+  font-weight : bold;
+  display : block;
+  margin : 20px auto;
+}
+
+.msgButtons{
+  display : flex;
+  flex-direction: row;
+  margin-left : auto;
+  margin-top : auto;
+}
+
+#joinButton, #cancelButton{
+	display : flex;
+	flex-direction: row;
+  position : relative;
+	background-color: #333;
+	border : none;
+	color: white;
+	padding : 16px 32px;
+	font-size : 15px;
+	text-align : center;
+	align-items : center;
+	justify-content : center;
+	text-decoration : none;
+	width: 100px;
+	margin : 10px 3px ;
 }

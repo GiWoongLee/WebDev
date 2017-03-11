@@ -21,35 +21,69 @@ var io = require('socket.io').listen(httpServer);
 //클라이언트가 socket.io 채널로 접속이 되었을 때에 대한 이벤트를 정의한다.
 //parameter socket은 connection이 성공했을 때 커넥션에 대한 정보를 담고 있는 변수
 io.sockets.on('connection',function(socket){
-  socket.on('findRoom',function(data){
+  socket.on('createRoom',function(data){
     var roomName = data.roomName;
-    var found = false;;
-    for(var i=0;i<rooms.length;i++){
-      if(rooms[i]==roomName){
-        found = true;
-        fs.readFile(__dirname + '/client/canvas.html', "utf-8", function(err,content){
-          if(err) return;
-          socket.emit('succLoadRoom',{
-            content : content
-          });
-          socket.join(roomName);
-        });
-        break;
-      }
-    }
-    if(found==false){
-      var msg = "No room with the name of " + roomName;
-      socket.emit('failLoadRoom',{
+    if(roomExist(roomName)){
+      var msg = roomName + " already exists. Want to join?";
+      socket.emit('roomCreated',{
+        status : "failure",
         content : msg
       });
     }
+    else{
+      socket.join(data.roomName);
+      rooms.push(data.roomName);
+      sendCanvasToClient(socket,"roomCreated");
+    }
   })
-  socket.on('loadRoomNames',function(data){
-    socket.emit("loadRoomList",{rooms : rooms})
+
+  socket.on('joinRoom',function(data){
+    var roomName = data.roomName;
+    socket.join(data.roomName);
+    rooms.push(data.roomName);
+    sendCanvasToClient(socket,"roomJoined");
   })
+
+  socket.on('findRoom',function(data){
+    var roomName = data.roomName;
+    if(roomExist(roomName)){
+      socket.join(data.roomName);
+      rooms.push(data.roomName);
+      sendCanvasToClient(socket,"roomFound");
+    }
+    else{
+      var msg = "Cannot find room name of " + roomName;
+      socket.emit("roomFound",{
+        status : "failure",
+        content : msg
+      });
+    }
+  });
+
 });
 
 var rooms = [ "canvas1", "canvas2", "canvas3"];
+
+function roomExist(roomName){
+  for(var i=0;i<rooms.length;i++){
+    if(rooms[i]==roomName){
+      return true;
+    }
+  }
+  return false;
+}
+
+var sendCanvasToClient = function(socket,msg){
+  fs.readFile(__dirname + "/client/canvas.html","utf-8",function(err,content){
+    if(err) return;
+    else {
+      socket.emit(msg,{
+        status : "succeed",
+        content : content
+      })
+    }
+  });
+}
 
 /*
 //socket으로 데이터 주고받으며 처리하기

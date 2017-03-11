@@ -366,5 +366,23 @@ var RoomName = function(){
   var button = document.createElement("li");
   button.className = "figureButtons";
   button.id = "roomName";
+
+  button.addEventListener('click',function(e){
+    if($('#functionBox').length){
+      $('#functionBox').remove();
+    }
+    else{
+      $('body').append("<div id='functionBox'></div>")
+      $('#functionBox').append("<button id='searchButton'>Search Room</button>");
+      $('#functionBox').append("<button id='createButton'>Create Room</button>");
+      $('#searchButton').click(function(e){
+        $('body').load('./find_your_room.html',function(){});
+      });
+      $('#createButton').click(function(e){
+        $('body').load('./create_your_room.html',function(){});
+      });
+    }
+  })
+
   return button;
 }
