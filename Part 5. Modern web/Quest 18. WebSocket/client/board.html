@@ -2,15 +2,17 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
-		<link rel="stylesheet" href="./canvas.css">
-		<script src="./canvas.js"></script>
+		<link rel="stylesheet" href="./board.css">
+		<script src="./app.js"></script>
+		<script src="./board.js"></script>
 		<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
 	</head>
 	<body>
 		<section class="desktop">
 		</section>
 		<script>
-			var myDesktop = new Desktop();
+			Board.on(App.getSocket());
 		</script>
 	</body>
 </html>

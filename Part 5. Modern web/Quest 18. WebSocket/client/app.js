@@ -1,15 +1,27 @@
-var Canvas = Canvas || (function(){
+var App = App || (function(){
   return {
     on : function(socket){
       $("#ft_button").click(function(e){
-        $('body').load('./find_your_room.html',function(){});
+        socket.emit('readFindRoomHTML',{});
+        socket.on('loadFindRoomHTML',function(data){
+          var temp = data.content.split("<body>");
+          var tempHead = temp[0].split("<head>")[1].split("</head>")[0];
+          var tempBody = temp[1].split("</body>")[0];
+          $('head').html(tempHead);
+          $('body').html(tempBody);
+        })
       });
       $("#ct_button").click(function(e){
         var roomName = $('#ct_name').val();
         var counter = 0;
         function createRoom(data){
           if(data.status=="succeed"){
-            $('body').html(data.content);
+            var temp = data.content.split("<body>");
+            var tempHead = temp[0].split("<head>")[1].split("</head>")[0];
+            var tempBody = temp[1].split("</body>")[0];
+            $('head').html(tempHead);
+            $('body').html(tempBody);
+            Board.makeComponent();
             $('#roomName').html(roomName);
           }
           else{
@@ -21,16 +33,17 @@ var Canvas = Canvas || (function(){
             $('.msgButtons').append("<button id='cancelButton'>Cancel</button>");
             $('#joinButton').click(function(e){
               function loadCanvas(data){
-                console.log(data);
-                console.log(data.content);
-                $('body').html(data.content);
+                var temp = data.content.split("<script>");
+                var tempHead = temp[0].split("<head>")[1].split("</head>")[0];
+                $('head').html(tempHead);
+                $('body').html(data.bodyPart);
                 $('#roomName').html(roomName);
                 socket.removeListener("roomJoined",loadCanvas);
               }
               $('#msgBox').remove();
               socket.emit('joinRoom',{roomName :roomName});
               socket.on('roomJoined',loadCanvas);
-            })
+            });
             $('#cancelButton').click(function(e){
               $('#msgBox').remove();
             })
@@ -41,7 +54,7 @@ var Canvas = Canvas || (function(){
         socket.on('roomCreated',createRoom);
       })
     },
-    getSocket : function () {
+    getSocket : function(){
       return socket;
     }
   }

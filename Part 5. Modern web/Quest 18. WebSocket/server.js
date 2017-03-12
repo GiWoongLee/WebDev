@@ -11,16 +11,41 @@ var httpServer = http.createServer(app).listen(8080,function(req,res){
 });
 
 app.get('/',function(req,res){
-  res.sendFile(__dirname + "/client/create_your_room.html");
+  res.sendFile(__dirname + "/client/app.html");
 })
 
 //Upgrade http server to socket.io server
 var io = require('socket.io').listen(httpServer);
-
+var sockets = [];
+var roomInfo = {
+  socketId : "",
+  request : "",
+  bodyPart : null
+}
 
 //클라이언트가 socket.io 채널로 접속이 되었을 때에 대한 이벤트를 정의한다.
 //parameter socket은 connection이 성공했을 때 커넥션에 대한 정보를 담고 있는 변수
 io.sockets.on('connection',function(socket){
+  console.log("connected");
+
+  socket.on('connected',function(data){
+    console.log("CONNECTED");
+  })
+
+  socket.on('readHomeHTML',function(data){
+    fs.readFile(__dirname + "/client/app.html", "utf-8", function(err,content){
+      if(err) return;
+      else socket.emit('loadHomeHTML',{content : content});
+    });
+  });
+
+  socket.on('readFindRoomHTML',function(data){
+    fs.readFile(__dirname + "/client/find_your_room.html", "utf-8", function(err,content){
+      if(err) return;
+      else socket.emit('loadFindRoomHTML',{content : content});
+    });
+  });
+
   socket.on('createRoom',function(data){
     var roomName = data.roomName;
     if(roomExist(roomName)){
@@ -38,16 +63,23 @@ io.sockets.on('connection',function(socket){
   })
 
   socket.on('joinRoom',function(data){
+    //Store User who want to join Room to prevent problem from networking with other socket
+    roomInfo.socketId = socket.id;
+    roomInfo.request = "roomJoined";
     var roomName = data.roomName;
     socket.join(data.roomName);
-    sendCanvasToClient(socket,"roomJoined");
+    socket.broadcast.to(roomName).emit("loadCurrentView",{});
   })
 
   socket.on('findRoom',function(data){
     var roomName = data.roomName;
     if(roomExist(roomName)){
+      //Store User who want to join Room to prevent problem from networking with other socket
+      roomInfo.socketId = socket.id;
+      roomInfo.request = "roomFound";
+      var roomName = data.roomName;
       socket.join(data.roomName);
-      sendCanvasToClient(socket,"roomFound");
+      socket.broadcast.to(roomName).emit("loadCurrentView",{});
     }
     else{
       var msg = "Cannot find room name of " + roomName;
@@ -57,6 +89,11 @@ io.sockets.on('connection',function(socket){
       });
     }
   });
+
+  socket.on("renderCurrentView",function(data){
+    roomInfo.bodyPart = data.bodyPart;
+    sendCanvasToClient(socket,roomInfo.request);
+  })
 
 
   socket.on('drawRectangle',function(data){
@@ -105,6 +142,8 @@ io.sockets.on('connection',function(socket){
   })
 
   socket.on('disconnect',function(){
+    socket.disconnect();
+    socket.emit('disconnected',{});
     console.log("DISCONNECTED");
   })
 
@@ -122,49 +161,27 @@ function roomExist(roomName){
 }
 
 var sendCanvasToClient = function(socket,msg){
-  fs.readFile(__dirname + "/client/canvas.html","utf-8",function(err,content){
-    if(err) return;
-    else {
-      socket.emit(msg,{
-        status : "succeed",
-        content : content
-      })
-    }
-  });
+  if(msg=="roomCreated"){
+    fs.readFile(__dirname + "/client/board.html","utf-8",function(err,content){
+      if(err) return;
+      else {
+        socket.emit(msg,{
+          status : "succeed",
+          content : content
+        })
+      }
+    });
+  }
+  else{
+    fs.readFile(__dirname + "/client/board.html","utf-8",function(err,content){
+      if(err) return;
+      else {
+        socket.broadcast.to(roomInfo.socketId).emit(msg,{
+          status : "succeed",
+          content : content,
+          bodyPart : roomInfo.bodyPart
+        })
+      }
+    });
+  }
 }
-
-/*
-var updateRoomStatus = function(socket,roomName){
-  var nickname = "Client-" + count;
-  socket.set('nickname',nickname,function(){
-    if(rooms[roomName]==undefine){
-      rooms[roomName] = new Object();
-      rooms[roomName].socket_ids = new Object();
-    }
-
-    rooms[roomName].socket_ids[nickname] = socket.id;
-
-
-
-  })
-}
-*/
-/*
-
-//방 파기
-socket.join(방의 아이디)
-socket.leave(방의 아이디)
-
-//그룹 대상으로 메세지 보내기
-io.sockets.to(방의 아이디).emit('이벤트명',데이터);
-socket.broadcast.to(방의 아이디).emit('이벤트명',데이터)
-
-//socket에 데이터 바인딩
-socket.set('key','value',function(){});
-socket.get('key',function(err,value){});
-socket.del('key',function(err,value){});
-
-io.sockets.manager.rooms => 현재 생성되어 있는 모든 room의 목록을 리턴한다
-io.sockets.clients('room name') => room name의 room 안에 있는 모든 클라이언트 소켓 목록을 리턴한다
-
-*/

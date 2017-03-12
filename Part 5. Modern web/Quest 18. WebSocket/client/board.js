@@ -1,81 +1,98 @@
-var socket = Canvas.getSocket();
 var figureNum = 0;
 
-socket.on("drawRectangle",function(data){
-  var ele = d3.select("#"+data.id);
-  if(ele.empty()){
-    ele = document.createElementNS("http://www.w3.org/2000/svg","rect");
-    ele.className = "figures";
-    ele.id = data.id;
-    figureNum++;
-    document.querySelector(".svgCanvas").appendChild(ele);
-    ele.setAttributeNS(null,"fill","#0000cc");
-    ele.setAttributeNS(null,"x",data.posX);
-    ele.setAttributeNS(null,"y",data.posY);
-    ele.setAttributeNS(null,"width",data.width);
-    ele.setAttributeNS(null,"height",data.height);
-  }
-  else{
-    ele.attr('x',data.posX);
-    ele.attr("y",data.posY);
-    ele.attr("width",data.width);
-    ele.attr("height",data.height);
-  }
-})
+var Board = Board || (function(){
+  return {
+    makeComponent : function(){
+      var desktop = new Desktop();
+    },
+    on : function(socket){
+      socket.on('loadCurrentView',function(data){
+        var roomName = $('#roomName').html();
+        var content = $('body').html();
+        socket.emit("renderCurrentView",{
+          roomName : roomName,
+          bodyPart : content
+        });
+      });
 
-socket.on("drawTriangle",function(data){
-  var ele = d3.select("#"+data.id);
-  var newPoint = {
-    a : data.point1,
-    b : data.point2,
-    c : data.point3,
-    d : data.point4,
-    e : data.point5,
-    f : data.point6
-  }
+      socket.on("drawRectangle",function(data){
+        var ele = d3.select("#"+data.id);
+        if(ele.empty()){
+          ele = document.createElementNS("http://www.w3.org/2000/svg","rect");
+          ele.className = "figures";
+          ele.id = data.id;
+          figureNum++;
+          document.querySelector(".svgCanvas").appendChild(ele);
+          ele.setAttributeNS(null,"fill","#0000cc");
+          ele.setAttributeNS(null,"x",data.posX);
+          ele.setAttributeNS(null,"y",data.posY);
+          ele.setAttributeNS(null,"width",data.width);
+          ele.setAttributeNS(null,"height",data.height);
+        }
+        else{
+          ele.attr('x',data.posX);
+          ele.attr("y",data.posY);
+          ele.attr("width",data.width);
+          ele.attr("height",data.height);
+        }
+      })
 
-  if(ele.empty()){
-    ele = document.createElementNS("http://www.w3.org/2000/svg","polygon");
-    ele.className = "figures";
-    ele.id = data.id;
-    figureNum++;
-    document.querySelector(".svgCanvas").appendChild(ele);
-    ele.setAttributeNS(null,"fill","green");
-    ele.setAttributeNS(null,"points",(newPoint.a + "," + newPoint.b + " " + newPoint.c + "," + newPoint.d + " " +newPoint.e + "," + newPoint.f));
-  }
-  else{
-    ele.attr("points",(newPoint.a + "," + newPoint.b + " " + newPoint.c + "," + newPoint.d + " " +newPoint.e + "," + newPoint.f));
-  }
-})
+      socket.on("drawTriangle",function(data){
+        var ele = d3.select("#"+data.id);
+        var newPoint = {
+          a : data.point1,
+          b : data.point2,
+          c : data.point3,
+          d : data.point4,
+          e : data.point5,
+          f : data.point6
+        }
 
-socket.on("drawCircle",function(data){
-  var ele = d3.select("#"+data.id);
-  if(ele.empty()){
-    ele = document.createElementNS("http://www.w3.org/2000/svg","circle");
-    ele.className = "figures";
-    ele.id = data.id;
-    figureNum++;
-    document.querySelector(".svgCanvas").appendChild(ele);
-    ele.setAttributeNS(null,"fill","red");
-    ele.setAttributeNS(null,"cx",data.cx);
-    ele.setAttributeNS(null,"cy",data.cy);
-    ele.setAttributeNS(null,"fill","#cc0000");
-    ele.setAttributeNS(null,"r",data.r);
+        if(ele.empty()){
+          ele = document.createElementNS("http://www.w3.org/2000/svg","polygon");
+          ele.className = "figures";
+          ele.id = data.id;
+          figureNum++;
+          document.querySelector(".svgCanvas").appendChild(ele);
+          ele.setAttributeNS(null,"fill","green");
+          ele.setAttributeNS(null,"points",(newPoint.a + "," + newPoint.b + " " + newPoint.c + "," + newPoint.d + " " +newPoint.e + "," + newPoint.f));
+        }
+        else{
+          ele.attr("points",(newPoint.a + "," + newPoint.b + " " + newPoint.c + "," + newPoint.d + " " +newPoint.e + "," + newPoint.f));
+        }
+      })
+
+      socket.on("drawCircle",function(data){
+        var ele = d3.select("#"+data.id);
+        if(ele.empty()){
+          ele = document.createElementNS("http://www.w3.org/2000/svg","circle");
+          ele.className = "figures";
+          ele.id = data.id;
+          figureNum++;
+          document.querySelector(".svgCanvas").appendChild(ele);
+          ele.setAttributeNS(null,"fill","red");
+          ele.setAttributeNS(null,"cx",data.cx);
+          ele.setAttributeNS(null,"cy",data.cy);
+          ele.setAttributeNS(null,"fill","#cc0000");
+          ele.setAttributeNS(null,"r",data.r);
+        }
+        else{
+          ele.attr("r",data.r);
+        }
+      })
+
+      socket.on('moveFigure',function(data){
+        var ele = d3.select("#"+data.id);
+        ele.attr("transform","translate(" + data.translateX + "," + data.translateY + ")");
+      })
+
+      socket.on('removeFigure',function(data){
+        var ele = d3.select("#" + data.id).remove();
+
+      })
+    }
   }
-  else{
-    ele.attr("r",data.r);
-  }
-})
-
-socket.on('moveFigure',function(data){
-  var ele = d3.select("#"+data.id);
-  ele.attr("transform","translate(" + data.translateX + "," + data.translateY + ")");
-})
-
-socket.on('removeFigure',function(data){
-  var ele = d3.select("#" + data.id).remove();
-
-})
+}());
 
 var Desktop = function(){
 
@@ -515,10 +532,26 @@ var RoomName = function(){
       $('#functionBox').append("<button id='searchButton'>Search Room</button>");
       $('#functionBox').append("<button id='createButton'>Create Room</button>");
       $('#searchButton').click(function(e){
-        $('body').load('./find_your_room.html',function(){});
+        socket.emit('readFindRoomHTML',{});
+        socket.on('loadFindRoomHTML',function(data){
+          var temp = data.content.split("<body>");
+          var tempHead = temp[0].split("<head>")[1].split("</head>")[0];
+          var tempBody = temp[1].split("</body>")[0];
+          $('head').html(tempHead);
+          $('body').html(tempBody);
+        })
       });
       $('#createButton').click(function(e){
-        $('body').load('./create_your_room.html',function(){});
+        socket.emit('readHomeHTML',{});
+        socket.on('loadHomeHTML',function(data){
+          socket.emit('disconnect',{});
+          socket.on('disconnected',function(){});
+          var temp = data.content.split("<body>");
+          var tempHead = temp[0].split("<head>")[1].split("</head>")[0];
+          var tempBody = temp[1].split("</body>")[0];
+          $('head').html(tempHead);
+          $('body').html(tempBody);
+        })
       });
     }
   })
